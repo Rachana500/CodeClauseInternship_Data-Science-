@@ -1,0 +1,61 @@
+4.import streamlit as st
+import pandas as pd
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
+import numpy as np
+
+# Dummy dataset for demonstration (real data should be used for actual training)
+data = {
+    'age': np.random.randint(20, 80, 1000),
+    'sex': np.random.randint(0, 2, 1000),
+    'cp': np.random.randint(0, 4, 1000),
+    'trestbps': np.random.randint(90, 200, 1000),
+    'chol': np.random.randint(100, 400, 1000),
+    'fbs': np.random.randint(0, 2, 1000),
+    'restecg': np.random.randint(0, 3, 1000),
+    'thalach': np.random.randint(60, 200, 1000),
+    'exang': np.random.randint(0, 2, 1000),
+    'oldpeak': np.random.uniform(0, 6, 1000),
+    'slope': np.random.randint(0, 3, 1000),
+    'ca': np.random.randint(0, 5, 1000),
+    'thal': np.random.randint(0, 4, 1000),
+    'target': np.random.randint(0, 2, 1000)  # 0 for no disease, 1 for disease
+}
+
+df = pd.DataFrame(data)
+
+# Preparing data for training
+X = df.drop('target', axis=1)
+y = df['target']
+
+# Splitting data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, randomState=42)
+
+# Training a simple Random Forest model
+model = RandomForestClassifier(n_estimators=100, random_state=42)
+model.fit(X_train, y_train)
+
+# Streamlit App
+st.title("Heart Disease Risk Assessment")
+
+st.write("Please input the following health metrics:")
+
+age = st.number_input("Age", min_value=0, max_value=150, value=50)
+sex = st.selectbox("Sex", options=[0, 1], format_func=lambda x: "Male" if x == 1 else "Female")
+cp = st.selectbox("Chest Pain Type", options=[0, 1, 2, 3])
+trestbps = st.number_input("Resting Blood Pressure", min_value=0, max_value=300, value=120)
+chol = st.number_input("Cholesterol", min_value=0, max_value=1000, value=200)
+fbs = st.selectbox("Fasting Blood Sugar > 120 mg/dl", options=[0, 1])
+restecg = st.selectbox("Resting Electrocardiographic Results", options=[0, 1, 2])
+thalach = st.number_input("Maximum Heart Rate Achieved", min_value=0, max_value=300, value=150)
+exang = st.selectbox("Exercise Induced Angina", options=[0, 1])
+oldpeak = st.number_input("ST depression induced by exercise relative to rest", min_value=0.0, max_value=10.0, value=1.0)
+slope = st.selectbox("The slope of the peak exercise ST segment", options=[0, 1, 2])
+ca = st.selectbox("Number of major vessels (0-3) colored by flourosopy", options=[0, 1, 2, 3, 4])
+thal = st.selectbox("Thalassemia", options=[0, 1, 2, 3])
+
+if st.button("Predict"):
+    input_data = pd.DataFrame({
+        'age': [age],
+        'sex': [sex],
+        'cp': [cp
