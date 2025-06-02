@@ -1,0 +1,28 @@
+1.# Import necessary libraries
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.datasets import load_iris
+
+# Load the Iris dataset
+iris = load_iris()
+df = pd.DataFrame(data=iris.data, columns=iris.feature_names)
+df['target'] = iris.target
+
+# Understand the characteristics of the dataset
+print("Dataset Shape:", df.shape)
+print("Dataset Columns:", df.columns)
+print("Dataset Head:\n", df.head())
+
+# Visualize the distribution of features
+sns.pairplot(df, hue='target')
+plt.show()
+
+# Understand the relationships between features
+corr_matrix = df.drop('target', axis=1).corr()
+print("Correlation Matrix:\n", corr_matrix)
+
+# Visualize the correlation matrix
+plt.figure(figsize=(8, 6))
+sns.heatmap(corr_matrix, annot=True, cmap='coolwarm', square=True)
+plt.show()
